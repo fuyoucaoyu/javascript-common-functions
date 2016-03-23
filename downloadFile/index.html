@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="full-screen" content="yes">
+    <meta name="browsermode" content="application"/>
+    <meta name="x5-fullscreen" content="true" />
+    <meta name="x5-page-mode" content="app" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="UTF-8">
+
+    <title>Download File</title>
+</head>
+<body>
+    <h3>Prohibit Copying</h3>
+    <input type="file" onchange="uploadFiles(event)" multiple="multiple" />
+    <br/>
+    <a href="#" onClick="downloadFile(event)">download</a>
+
+    <script type="text/javascript">
+        var fileList = [];
+        function uploadFiles(event) {
+            var files = event.target.files;
+            var len = files.length;
+            var file;
+            var name;
+            var type;
+            var data;
+            for (var i = 0; i < len; i++) {
+                file = files[i];
+                name = file.name;
+                type = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
+
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                    fileList.push({
+                        name: name,
+                        type: type,
+                        data: evt.target.result,
+                        fileData: file
+                    })
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function downloadFile(event) {
+            downloadFileByFile();
+        }
+
+        function downloadFileByFile(event) {
+            var urlObj = window.URL || window.webkitURL || window;
+
+            var len = fileList.length;
+            var file;
+            for (var i = 0; i < len; i++) {
+                file = fileList[i];
+                var saveLink = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+                saveLink.href = urlObj.createObjectURL(file.fileData);
+                saveLink.download = file.name;
+                var evt = document.createEvent('MouseEvent');
+                evt.initMouseEvent( "click", true, false, window, 0, 0, 0, 0, 0
+                , false, false, false, false, 0, null);
+                saveLink.dispatchEvent(evt);
+            }
+        }
+
+        function downloadFileByBase64(event) {
+            var len = fileList.length;
+            var file;
+            for (var i = 0; i < len; i++) {
+                file = fileList[i];
+                var saveLink = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+                saveLink.href = file.data;
+                saveLink.download = file.name;
+                var evt = document.createEvent('MouseEvent');
+                evt.initMouseEvent( "click", true, false, window, 0, 0, 0, 0, 0
+                , false, false, false, false, 0, null);
+                saveLink.dispatchEvent(evt);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="full-screen" content="yes">
+    <meta name="browsermode" content="application"/>
+    <meta name="x5-fullscreen" content="true" />
+    <meta name="x5-page-mode" content="app" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="UTF-8">
+
+    <title>prohibit copying 2</title>
+    <script>
+    </script>
+</head>
+<body>
+    <h3>this is title</h3>
+    <article>
+        var prohibitFn = function () {          <br/>
+            return false;                       <br/>
+        };                                      <br/>
+
+        document.oncontextmenu = prohibitFn;    <br/>
+        document.ondragstart = prohibitFn;      <br/>
+        document.onselectstart = prohibitFn;    <br/>
+        document.onselect = prohibitFn;         <br/>
+        document.oncopy = prohibitFn;           <br/>
+        document.onbeforecopy = prohibitFn;
+    </article>
+    <script type="text/javascript">
+        var prohibitFn = function () {
+            return false;
+        };
+
+        function start () {
+            document.oncontextmenu = prohibitFn;
+            document.ondragstart = prohibitFn;
+            document.onselectstart = prohibitFn;
+            document.onselect = prohibitFn;
+            document.oncopy = prohibitFn;
+            document.onbeforecopy = prohibitFn;
+        }
+
+        function end () {
+            document.oncontextmenu = undefined;
+            document.ondragstart = undefined;
+            document.onselectstart = undefined;
+            document.onselect = undefined;
+            document.oncopy = undefined;
+            document.onbeforecopy = undefined;
+        }
+
+        start();
+    </script>
+</body>
+</html>
