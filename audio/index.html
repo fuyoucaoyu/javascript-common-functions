@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="full-screen" content="yes">
+    <meta name="browsermode" content="application"/>
+    <meta name="x5-fullscreen" content="true" />
+    <meta name="x5-page-mode" content="app" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta charset="UTF-8">
+
+    <title>audio</title>
+
+    <style type="text/css">
+        table.dataintable {
+            margin-top: 10px;
+            border-collapse: collapse;
+            border: 1px solid #aaa;
+            width: 100%;
+        }
+
+        table.dataintable th {
+            vertical-align: baseline;
+            padding: 5px 15px 5px 6px;
+            background-color: #d5d5d5;
+            border: 1px solid #aaa;
+            text-align: left;
+        }
+
+        table.dataintable td {
+            vertical-align: text-top;
+            padding: 6px 15px 6px 6px;
+            background-color: #efefef;
+            border: 1px solid #aaa;
+        }
+
+        .play-pause-btn {
+            width: 200px;
+            height: 50px;
+            line-height: 50px;
+            background-color: cadetblue;
+            text-align: center;
+            border-radius: 8px;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <table class="dataintable">
+        <tbody>
+            <tr>
+                <th>&nbsp;</th>
+                <th style="width:16%;">IE 9</th>
+                <th style="width:16%;">Firefox 3.5</th>
+                <th style="width:16%;">Opera 10.5</th>
+                <th style="width:16%;">Chrome 3.0</th>
+                <th style="width:16%;">Safari 3.0</th>
+            </tr>
+
+            <tr>
+                <td>Ogg Vorbis</td>
+                <td>&nbsp;</td>
+                <td>√</td>
+                <td>√</td>
+                <td>√</td>
+                <td>&nbsp;</td>
+            </tr>
+
+            <tr>
+                <td>MP3</td>
+                <td>√</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>√</td>
+                <td>√</td>
+            </tr>
+
+            <tr>
+                <td>Wav</td>
+                <td>&nbsp;</td>
+                <td>√</td>
+                <td>√</td>
+                <td>&nbsp;</td>
+                <td>√</td>
+            </tr>
+        </tbody>
+    </table>
+    <br/>
+
+    <article>
+        Android version of Chrome in fact blocks autoplay function, but you can change settings of the browser. To do this, you have to enter chrome://flags and set Disable gesture requirement for media playback to on. <br/>
+        It's impossible to force this setting in web; <br/>
+        If it's a hybird app, we can use it.
+    </article>
+    <br/>
+    <br/>
+
+    <div id="bgMusicBtn" class="play-pause-btn">暂停背景音乐</div>
+    <div id="musicBtn" class="play-pause-btn">播放音乐</div>
+
+    <audio id="musicAudio">
+        <source src="./song.ogg" type="audio/ogg" />
+        <source src="./song.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+    </audio>
+
+    <audio id="bgMusicAudio" autoplay="autoplay" loop="loop">
+        <source src="./ec.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+    </audio>
+
+    <script type="text/javascript">
+        var bgMusicPlaying = true;
+        var musicPlaying = false;
+        var bgMusicBtn = document.getElementById('bgMusicBtn');
+        var musicBtn = document.getElementById('musicBtn');
+
+        var bgMusicAudio = document.getElementById('bgMusicAudio');
+        var musicAudio = document.getElementById('musicAudio');
+
+        musicAudio.addEventListener('ended', function (event) {
+            musicBtn.innerText = '开始音乐';
+        })
+
+        function clickBgMusicBtn (event) {
+            if (bgMusicAudio.paused) {
+                bgMusicAudio.play();
+                bgMusicBtn.innerText = '暂停背景音乐';
+            } else {
+                bgMusicAudio.pause();
+                bgMusicBtn.innerText = '开始背景音乐';
+            }
+        }
+
+        bgMusicBtn.addEventListener('click', clickBgMusicBtn);
+        // bgMusicBtn.addEventListener('touchend', clickBgMusicBtn);
+
+        function clickMusicBtn (event) {
+            if (musicAudio.paused) {
+                musicAudio.play();
+                musicBtn.innerText = '暂停音乐';
+            } else {
+                musicAudio.pause();
+                musicBtn.innerText = '开始音乐';
+            }
+        }
+
+        musicBtn.addEventListener('click', clickMusicBtn);
+        // musicBtn.addEventListener('touchend', clickMusicBtn);
+
+        window.onbeforeunload = function() {   
+
+            musicAudio.pause();
+            bgMusicAudio.pause();
+            musicAudio.src = '';
+            bgMusicAudio.src = '';
+
+            // alert();  
+            // return false; // 可以阻止关闭  
+        }
+    </script>
+</body>
+</html>
