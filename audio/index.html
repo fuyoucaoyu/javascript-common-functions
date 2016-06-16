@@ -12,6 +12,11 @@
     <title>audio</title>
 
     <style type="text/css">
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+        }
         table.dataintable {
             margin-top: 10px;
             border-collapse: collapse;
@@ -93,26 +98,28 @@
         It's impossible to force this setting in web; <br/>
         If it's a hybird app, we can use it.
     </article>
+
+    <div id="message"></div>
     <br/>
     <br/>
 
     <div id="bgMusicBtn" class="play-pause-btn">暂停背景音乐</div>
     <div id="musicBtn" class="play-pause-btn">播放音乐</div>
 
-    <audio id="musicAudio">
+    <audio id="musicAudio" preload="load">
         <source src="./song.ogg" type="audio/ogg" />
         <source src="./song.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
     </audio>
 
-    <audio id="bgMusicAudio" autoplay="autoplay" loop="loop">
+    <audio id="bgMusicAudio" loop="loop">
         <source src="./ec.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
     </audio>
 
+    <script type="text/javascript" src="./shake.js"></script>
     <script type="text/javascript">
-        var bgMusicPlaying = true;
-        var musicPlaying = false;
+        var message = document.getElementById('message');
         var bgMusicBtn = document.getElementById('bgMusicBtn');
         var musicBtn = document.getElementById('musicBtn');
 
@@ -159,6 +166,33 @@
             // alert();  
             // return false; // 可以阻止关闭  
         }
+
+
+        var saveLink = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+        saveLink.href = 'javascript:;';
+        var evt = document.createEvent('MouseEvent');
+        evt.initMouseEvent( 'click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+        saveLink.addEventListener('click', function (event) {
+            message.innerText = message.innerText + '<br/> click: ' + musicAudio.paused;
+
+            musicAudio.play();
+            musicBtn.innerText = '暂停音乐';
+        })
+
+        function shakeEventDidOccur() {
+            message.innerText = 'shake: ' + musicAudio.paused;
+            
+            musicAudio.play();
+            musicBtn.innerText = '暂停音乐';
+
+            // saveLink.dispatchEvent(evt);
+        }
+        var myShakeEvent = new Shake({
+            threshold: 15
+        });
+        myShakeEvent.start();
+        window.addEventListener('shake', shakeEventDidOccur, false);
+
     </script>
 </body>
 </html>
